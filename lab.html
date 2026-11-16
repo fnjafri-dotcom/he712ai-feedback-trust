@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trust Lab · HE712AI</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .lab { padding: 36px 0 20px; }
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; margin: 18px 0; }
+  .progress { height: 6px; background: var(--line); border-radius: 99px; overflow: hidden; margin: 6px 0 18px; }
+  .progress > div { height: 100%; background: var(--accent); width: 0; transition: width .3s; }
+  .tag { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .work { background: #f6f7f8; border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; white-space: pre-wrap; font-size: 15.5px; }
+  .ai { background: #f2f6ff; border: 1px solid #c9d6f2; border-radius: 8px; padding: 14px 16px; position: relative; font-size: 15.5px; }
+  .ai::before { content: "AI feedback"; position: absolute; top: -10px; left: 12px; background: #3b5ba9; color: #fff; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; letter-spacing: .05em; text-transform: uppercase; }
+  .q { font-weight: 600; margin: 22px 0 10px; }
+  .choice-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .choice { border: 1.5px solid var(--line); background: #fff; border-radius: 8px; padding: 10px 16px; cursor: pointer; font: 600 15px var(--sans); color: var(--ink); }
+  .choice[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+  .conf { display: flex; gap: 6px; }
+  .conf .choice { width: 46px; padding: 10px 0; text-align: center; }
+  textarea { width: 100%; min-height: 70px; border: 1px solid var(--line); border-radius: 8px; padding: 10px; font: 15px var(--sans); }
+  .persp { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 18px; }
+  @media (max-width: 640px) { .persp { grid-template-columns: 1fr; } }
+  .persp div { border-radius: 8px; padding: 14px 16px; font-size: 15px; }
+  .persp .for { background: var(--ok-soft); border: 1px solid #b9d8bd; }
+  .persp .against { background: var(--warm-soft); border: 1px solid #efc4ae; }
+  .persp b { display: block; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 4px; }
+  .sit { margin-top: 12px; padding: 12px 16px; border-left: 4px solid var(--accent); background: var(--accent-soft); border-radius: 0 8px 8px 0; font-size: 15px; }
+  .kv { display: grid; grid-template-columns: 170px 1fr; gap: 6px 14px; font-size: 15px; margin-top: 10px; }
+  .kv b { color: var(--muted); font-weight: 600; }
+  @media (max-width: 600px) { .kv { grid-template-columns: 1fr; } }
+  .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 14px 0; }
+  .stat { background: #f6f7f8; border-radius: 8px; padding: 14px; text-align: center; }
+  .stat .n { font-family: var(--serif); font-size: 34px; font-weight: 600; }
+  .stat .l { font-size: 13px; color: var(--muted); }
+  @media (max-width: 600px) { .stat-row { grid-template-columns: 1fr; } }
+  select { font: 16px var(--sans); padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line); background: #fff; }
+  .hidden { display: none; }
+  pre.summary { white-space: pre-wrap; background: #f6f7f8; border: 1px solid var(--line); border-radius: 8px; padding: 14px; font-size: 14px; }
+</style>
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <a class="brand" href="index.html">HE712AI · Feedback and Trust in AI</a>
+  <nav><a href="index.html">Overview</a><a href="interactive.html">Option 1 · Interactive</a><a href="d2l.html">Option 2 · D2L</a></nav>
+</div></header>
+
+<main class="wrap lab">
+
+  <!-- INTRO -->
+  <section id="intro">
+    <p class="eyebrow">Experiential activity · about 15 minutes</p>
+    <h1>Trust Lab</h1>
+    <p class="lede">Five short pieces of learner work, each with feedback from an AI tool. For each one, decide what you'd do with the feedback. There's no answer key. Reasonable educators will disagree, and that disagreement is what we'll discuss.</p>
+    <div class="panel">
+      <p><strong>How it works.</strong> Choose what you'd do with the feedback and how sure you are. Then you'll see a case for using it, a case for caution, and a question to think about. At the end you'll see your own pattern, to bring to your partner discussion.</p>
+      <p class="small">All cases are fictional and written for teaching. Nothing you enter leaves your browser.</p>
+      <p class="q">Your theory lens</p>
+      <select id="lens">
+        <option value="kolb">Kolb's experiential learning</option>
+        <option value="constructivism">Constructivism</option>
+        <option value="cogload">Cognitive load theory</option>
+        <option value="sdt">Self-determination theory</option>
+        <option value="dp">Deliberate practice</option>
+        <option value="dual">Dual-process thinking</option>
+        <option value="unstated">Unstated theory group</option>
+      </select>
+      <p style="margin-top:22px"><button class="btn" id="start">Start</button></p>
+    </div>
+  </section>
+
+  <!-- CASE -->
+  <section id="case" class="hidden">
+    <div class="small" id="counter"></div>
+    <div class="progress"><div id="bar"></div></div>
+    <div class="panel">
+      <h3 id="title" style="margin-top:0"></h3>
+      <p class="small" id="context"></p>
+      <div class="work" id="work"></div>
+      <div style="height:26px"></div>
+      <div class="ai" id="aifb"></div>
+
+      <div id="decide">
+        <p class="q">What would you do with this feedback?</p>
+        <div class="choice-row" id="pick">
+          <button class="choice" data-v="use" aria-pressed="false">Use as is</button>
+          <button class="choice" data-v="edit" aria-pressed="false">Edit it first</button>
+          <button class="choice" data-v="check" aria-pressed="false">Check something first</button>
+          <button class="choice" data-v="no" aria-pressed="false">Don't use it</button>
+        </div>
+        <p class="q">How sure are you? <span class="small">(1 = unsure, 5 = very sure)</span></p>
+        <div class="conf" id="conf">
+          <button class="choice" data-v="1" aria-pressed="false">1</button>
+          <button class="choice" data-v="2" aria-pressed="false">2</button>
+          <button class="choice" data-v="3" aria-pressed="false">3</button>
+          <button class="choice" data-v="4" aria-pressed="false">4</button>
+          <button class="choice" data-v="5" aria-pressed="false">5</button>
+        </div>
+        <p class="q">Why? <span class="small">(optional, one sentence)</span></p>
+        <textarea id="note"></textarea>
+        <p style="margin-top:16px"><button class="btn" id="submit" disabled>Continue</button></p>
+      </div>
+
+      <div id="reveal" class="hidden"></div>
+      <p id="nextwrap" class="hidden" style="margin-top:16px"><button class="btn" id="next">Next</button></p>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" class="hidden">
+    <p class="eyebrow">Debrief</p>
+    <h1>Your pattern</h1>
+    <p class="lede">There's no score. This is a picture of how you treated AI feedback today.</p>
+    <div class="stat-row" style="grid-template-columns:repeat(4,1fr)">
+      <div class="stat"><div class="n" id="nUse"></div><div class="l">use as is</div></div>
+      <div class="stat"><div class="n" id="nEdit"></div><div class="l">edit first</div></div>
+      <div class="stat"><div class="n" id="nCheck"></div><div class="l">check first</div></div>
+      <div class="stat"><div class="n" id="nNo"></div><div class="l">don't use</div></div>
+    </div>
+    <div class="panel" id="patterns"></div>
+    <div class="panel">
+      <h3 style="margin-top:0">Through your lens</h3>
+      <div id="lensDebrief"></div>
+    </div>
+    <div class="panel">
+      <h3 style="margin-top:0">Bring this to your partner</h3>
+      <p class="small">Copy your choices into your partner post. Where you and your partner chose differently is the conversation.</p>
+      <pre class="summary" id="summary"></pre>
+      <button class="btn ghost" id="copy">Copy</button>
+      <button class="btn ghost" id="restart" style="margin-left:8px">Start over</button>
+      <a class="btn" href="interactive.html#step-4" style="margin-left:8px">Continue to reflection</a>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">HE712AI · Feedback and Trust in AI · All cases are fictional and written for teaching.</div></footer>
+
+<script>
+const CASES = [
+  {
+    title: "A reflection after a team simulation",
+    context: "A learner's short written reflection.",
+    work: "When things started going wrong I froze for a few seconds and someone else took over. I need to work on that, but I'm not sure how.",
+    ai: "Great reflection! Recognizing this is an important first step. Try these: 1) Rehearse your opening words before each simulation. 2) Practice speaking up early in low-stakes settings. 3) Ask a colleague to observe and give you feedback. You've got this!",
+    pro: "It's warm, it normalizes the moment, and it gives concrete next steps right away, which many learners never get.",
+    con: "The tips are generic, and it answers \"I'm not sure how\" for the learner instead of exploring why they froze. A coach might ask a question first.",
+    sit: "Is a good-enough answer now better than a better conversation later?"
+  },
+  {
+    title: "Patient education handout",
+    context: "A learner drafted a one-page handout for patients. The AI was asked for feedback.",
+    work: "Engage in therapeutic exercise 3x daily to optimize functional mobility and mitigate deconditioning. Discontinue and notify your provider if adverse symptoms occur.",
+    ai: "This is written above most patients' reading level. Here's a plain-language version you can use: \"Do your exercises 3 times a day. They help you stay strong and move more easily. Stop and call us if you feel dizzy, short of breath, or have new pain.\"",
+    pro: "The feedback is accurate and the rewrite is clearly better for patients.",
+    con: "It did the work for the learner. Next time, will they be able to write in plain language themselves?",
+    sit: "When does a model answer help learning, and when does it replace it?"
+  },
+  {
+    title: "Patient teaching conversation",
+    context: "Transcript excerpt from a learner whose first language isn't English.",
+    work: "\"Today I explain your new medicine. After, can you tell me how you will take it at home, so I am sure I explained good?\"\n\"You seem worried. What is worrying you most?\"",
+    ai: "Communication: 3/5. Good use of teach-back and an open question about the patient's concerns. However, grammatical errors (\"I explain,\" \"explained good\") may reduce professionalism. Consider language support.",
+    pro: "It names the teach-back and the open question, which are real strengths, and it's honest about clarity.",
+    con: "The score may be pulled down by grammar rather than by communication. Would a native speaker using the same behaviors have scored higher?",
+    sit: "What should a communication score measure, and who decides?"
+  },
+  {
+    title: "Using evidence in a short paper",
+    context: "A paragraph from a learner's evidence-based practice assignment.",
+    work: "Fall prevention programs that combine strength and balance exercise appear to reduce falls in older adults, but adherence is a common challenge.",
+    ai: "Good summary. To strengthen it, cite Martins et al. (2021), a Cochrane review showing a 40% reduction in falls with supervised balance programs.",
+    pro: "Pointing a learner to a systematic review is exactly the right instinct.",
+    con: "Is that citation real? AI tools sometimes invent plausible references. (This one was written for this exercise.)",
+    sit: "What should you verify before passing AI feedback along, and how long can you afford to spend?"
+  },
+  {
+    title: "Feedback on a first attempt",
+    context: "A first-week learner submitted a three-sentence plan. The AI's feedback was over 300 words.",
+    work: "I will introduce myself, ask the patient what brings them in today, and then ask about their symptoms.",
+    ai: "A solid start. Here are 12 suggestions to strengthen your plan: 1) Confirm the patient's preferred name. 2) Explain your role. 3) Set an agenda together. 4) Use open-ended questions first. 5) Summarize periodically. 6) Screen for social needs. 7) … [and 6 more]",
+    pro: "Every suggestion is accurate, and a motivated learner gets a full roadmap.",
+    con: "Twelve points for a first-week learner may overwhelm them. One or two priorities might teach more.",
+    sit: "Is more complete feedback better feedback?"
+  }
+];
+
+const LABELS = { use: "Use as is", edit: "Edit it first", check: "Check something first", no: "Don't use it" };
+
+const LENS = {
+  kolb: ["Kolb's experiential learning", ["In which cases did the AI skip the learner's reflection step?", "Where should AI feedback enter the cycle, and where should a person guide it?"]],
+  constructivism: ["Constructivism", ["In which cases did the AI hand over an answer rather than help the learner build one?", "Can AI act as a \"more knowledgeable other\" when it's sometimes wrong?"]],
+  cogload: ["Cognitive load theory", ["Which feedback added load, and which reduced it?", "How much time and effort did checking AI feedback take you, and what does that mean for learners?"]],
+  sdt: ["Self-determination theory", ["How might each piece of feedback affect the learner's sense of competence and autonomy?", "What happens to relatedness when feedback comes from a tool?"]],
+  dp: ["Deliberate practice", ["Which feedback would help a learner practice the next attempt?", "What happens to practice if the feedback is sometimes wrong?"]],
+  dual: ["Dual-process thinking", ["Which choices did you make quickly, and which made you slow down? Why?", "What would help learners slow down at the right moments?"]],
+  unstated: ["Unstated theory group", ["What rule of thumb did you use to decide?", "What does that rule assume about how people learn?"]]
+};
+
+let i = 0, lens = "kolb", picks = {}, results = [];
+const $ = id => document.getElementById(id);
+const store = {
+  get(k) { try { return localStorage.getItem("he712ai." + k); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem("he712ai." + k, v); } catch {} }
+};
+const savedLens = store.get("lens");
+if (savedLens && document.querySelector(`#lens option[value="${savedLens}"]`)) $("lens").value = savedLens;
+
+function setPressed(group, btn) { group.querySelectorAll(".choice").forEach(b => b.setAttribute("aria-pressed", b === btn ? "true" : "false")); }
+function ready() { $("submit").disabled = !(picks.pick && picks.conf); }
+$("pick").addEventListener("click", e => { const b = e.target.closest(".choice"); if (!b) return; picks.pick = b.dataset.v; setPressed($("pick"), b); ready(); });
+$("conf").addEventListener("click", e => { const b = e.target.closest(".choice"); if (!b) return; picks.conf = +b.dataset.v; setPressed($("conf"), b); ready(); });
+
+$("start").onclick = () => { lens = $("lens").value; store.set("lens", lens); $("intro").classList.add("hidden"); $("case").classList.remove("hidden"); show(); };
+
+function show() {
+  const c = CASES[i]; picks = {};
+  $("counter").textContent = `${i + 1} of ${CASES.length}`;
+  $("bar").style.width = `${(i / CASES.length) * 100}%`;
+  $("title").textContent = c.title;
+  $("context").textContent = c.context;
+  $("work").textContent = c.work;
+  $("aifb").textContent = c.ai;
+  $("note").value = "";
+  document.querySelectorAll("#decide .choice").forEach(b => b.setAttribute("aria-pressed", "false"));
+  $("submit").disabled = true;
+  $("decide").classList.remove("hidden");
+  $("reveal").classList.add("hidden");
+  $("nextwrap").classList.add("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+$("submit").onclick = () => {
+  const c = CASES[i];
+  results.push({ i, pick: picks.pick, conf: picks.conf, note: $("note").value.trim() });
+  $("reveal").innerHTML = `<p class="small" style="margin:18px 0 0">You chose <strong>${LABELS[picks.pick]}</strong> (sureness ${picks.conf}/5). Here are two ways to see it:</p>
+    <div class="persp"><div class="for"><b>A case for using it</b>${c.pro}</div><div class="against"><b>A case for caution</b>${c.con}</div></div>
+    <div class="sit"><strong>Question to think about:</strong> ${c.sit}</div>`;
+  $("reveal").classList.remove("hidden");
+  $("decide").classList.add("hidden");
+  $("next").textContent = i === CASES.length - 1 ? "See my pattern" : "Next";
+  $("nextwrap").classList.remove("hidden");
+};
+
+$("next").onclick = () => { i++; if (i < CASES.length) show(); else finish(); };
+
+function finish() {
+  $("case").classList.add("hidden"); $("results").classList.remove("hidden"); window.scrollTo({ top: 0 });
+  const n = k => results.filter(r => r.pick === k).length;
+  $("nUse").textContent = n("use"); $("nEdit").textContent = n("edit"); $("nCheck").textContent = n("check"); $("nNo").textContent = n("no");
+  const sorted = [...results].sort((a, b) => b.conf - a.conf);
+  const most = sorted[0], least = sorted[sorted.length - 1];
+  $("patterns").innerHTML = `<h3 style="margin-top:0">What stands out</h3>
+    <p><strong>Most sure:</strong> "${CASES[most.i].title}": ${LABELS[most.pick]} (${most.conf}/5).<br>
+    <strong>Least sure:</strong> "${CASES[least.i].title}": ${LABELS[least.pick]} (${least.conf}/5).</p>
+    <p>${n("use") === results.length ? "You used every piece of feedback as is. What made it trustworthy enough?" : n("use") === 0 ? "You didn't use any feedback as is. What would it take for AI feedback to earn that?" : "You trusted some feedback as is and held back on the rest. What separated the two?"}</p>`;
+  const L = LENS[lens];
+  $("lensDebrief").innerHTML = `<p class="small">${L[0]}</p><ol>${L[1].map(q => `<li>${q}</li>`).join("")}</ol>`;
+  const lines = [
+    "Trust Lab: my choices",
+    `Lens: ${L[0]}`,
+    `Use as is ${n("use")} | Edit first ${n("edit")} | Check first ${n("check")} | Don't use ${n("no")}`,
+    "",
+    ...results.map(r => `${r.i + 1}. ${CASES[r.i].title}: ${LABELS[r.pick]} (sure ${r.conf}/5)${r.note ? `: ${r.note}` : ""}`)
+  ];
+  $("summary").textContent = lines.join("\n");
+  store.set("labSummary", lines.join("\n"));
+}
+
+$("copy").onclick = async () => {
+  try { await navigator.clipboard.writeText($("summary").textContent); $("copy").textContent = "Copied"; }
+  catch { const r = document.createRange(); r.selectNodeContents($("summary")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); $("copy").textContent = "Selected: press Ctrl/Cmd+C"; }
+};
+$("restart").onclick = () => { i = 0; results = []; $("results").classList.add("hidden"); $("intro").classList.remove("hidden"); $("copy").textContent = "Copy"; window.scrollTo({ top: 0 }); };
+</script>
+</body>
+</html>

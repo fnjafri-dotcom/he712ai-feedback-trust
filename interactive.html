@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feedback and Trust in AI · Interactive module · HE712AI</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .stepper { position: sticky; top: 0; z-index: 5; background: var(--paper); border-bottom: 1px solid var(--line); }
+  .stepper .wrap { display: flex; gap: 6px; padding-top: 10px; padding-bottom: 10px; overflow-x: auto; }
+  .stepper button { flex: 1 0 auto; border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 7px 14px; font: 600 14px var(--sans); color: var(--muted); cursor: pointer; white-space: nowrap; }
+  .stepper button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .stepper button.done::after { content: " ✓"; }
+  section.step { display: none; padding-bottom: 20px; }
+  section.step.active { display: block; }
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; margin: 18px 0; }
+  .q { font-weight: 600; margin: 18px 0 8px; }
+  textarea { width: 100%; min-height: 90px; border: 1px solid var(--line); border-radius: 8px; padding: 10px; font: 15.5px/1.5 var(--sans); }
+  select { font: 15px var(--sans); padding: 7px 9px; border-radius: 8px; border: 1px solid var(--line); background: #fff; }
+  input[type=range] { width: 100%; accent-color: var(--accent); }
+  .rangeval { font-family: var(--serif); font-size: 26px; font-weight: 600; color: var(--accent); }
+  .reading-head { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+  .reading-head .time { font-size: 14px; color: var(--muted); }
+  .cite { font-size: 14px; color: var(--muted); margin: 4px 0 12px; }
+  .task { background: #f6f7f8; border: 1px solid var(--line); border-radius: 8px; padding: 16px; margin: 14px 0; }
+  .task h4 { margin: 0 0 6px; font-family: var(--serif); font-size: 17px; }
+  .item { display: grid; grid-template-columns: 1fr 190px; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px dashed var(--line); }
+  .item:last-child { border-bottom: 0; }
+  @media (max-width: 620px) { .item { grid-template-columns: 1fr; } }
+  .mark { font-size: 13px; font-weight: 700; margin-left: 6px; }
+  .mark.ok { color: var(--ok); } .mark.no { color: var(--warm); }
+  .reveal { display: none; border-left: 4px solid var(--accent); background: var(--accent-soft); padding: 12px 16px; border-radius: 0 8px 8px 0; margin-top: 12px; }
+  .reveal.show { display: block; }
+  .check { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; }
+  .check input { margin-top: 5px; width: 18px; height: 18px; accent-color: var(--accent); }
+  .radio { display: block; padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px; margin: 6px 0; cursor: pointer; background: #fff; }
+  .radio input { margin-right: 8px; accent-color: var(--accent); }
+  .lensbox { border: 2px solid var(--accent); border-radius: var(--radius); padding: 18px 20px; background: #fff; }
+  .lensbox .tag { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+  .nav-row { display: flex; justify-content: space-between; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 680px) { .compare { grid-template-columns: 1fr; } }
+  .compare .card { margin: 0; }
+  pre.export { white-space: pre-wrap; background: #f6f7f8; border: 1px solid var(--line); border-radius: 8px; padding: 14px; font-size: 13.5px; max-height: 420px; overflow: auto; }
+  .hint { font-size: 13px; color: var(--muted); }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <a class="brand" href="index.html">HE712AI · Feedback and Trust in AI</a>
+  <nav><a href="index.html">Overview</a><a href="interactive.html">Option 1 · Interactive</a><a href="d2l.html">Option 2 · D2L</a></nav>
+</div></header>
+
+<div class="stepper"><div class="wrap" id="stepper">
+  <button data-step="0">Start</button>
+  <button data-step="1">1 · Predict</button>
+  <button data-step="2">2 · Read and work</button>
+  <button data-step="3">3 · Lab</button>
+  <button data-step="4">4 · Reflect</button>
+  <button data-step="5">5 · Submit</button>
+</div></div>
+
+<main class="wrap">
+
+<!-- START -->
+<section class="step" id="step-0">
+  <div class="hero">
+    <p class="eyebrow">Option 1 · Interactive · Block 2 · Layer 5</p>
+    <h1>Feedback and Trust in AI</h1>
+    <p class="lede">This week you'll commit to a prediction, work through four readings with a short activity for each, test your own trust in AI feedback, then reflect on what changed. The difficulties are deliberate. Committing to an answer before you know it, and working to retrieve and apply ideas, makes learning stick. These are what researchers call <em>desirable difficulties</em>.</p>
+    <div class="meta">
+      <span class="chip">About 4 hours</span>
+      <span class="chip">Course objectives 2, 4, 7</span>
+      <span class="chip warm">Predict → desirable difficulties → reflect</span>
+    </div>
+  </div>
+  <div class="panel">
+    <p class="q" style="margin-top:0">Which theory lens are you working with this semester?</p>
+    <select id="lens">
+      <option value="kolb">Kolb's experiential learning</option>
+      <option value="constructivism">Constructivism</option>
+      <option value="cogload">Cognitive load theory</option>
+      <option value="sdt">Self-determination theory</option>
+      <option value="dp">Deliberate practice</option>
+      <option value="dual">Dual-process thinking</option>
+      <option value="unstated">Unstated theory group</option>
+    </select>
+    <p class="hint" style="margin-top:12px">Your answers are saved only in this browser so you can come back to them. Nothing is sent anywhere. At the end you'll copy everything into D2L.</p>
+    <div class="nav-row"><span></span><button class="btn" data-go="1">Begin</button></div>
+  </div>
+</section>
+
+<!-- 1 PREDICT -->
+<section class="step" id="step-1">
+  <h2>1 · Predict</h2>
+  <p>Before any reading, commit to what you think now. There are no wrong answers. You'll come back to these in Step 4.</p>
+  <div class="panel">
+    <p class="q" style="margin-top:0">How much do you trust AI-generated feedback for learners today?</p>
+    <div class="rangeval"><span id="trustVal">50</span>%</div>
+    <input type="range" id="trustPre" min="0" max="100" value="50" data-save>
+    <p class="hint">0 = I'd never give it to a learner without rewriting it. 100 = I'd pass it along as is.</p>
+
+    <p class="q">Which kind of feedback do you think AI is <em>best</em> at, and which is it <em>worst</em> at?</p>
+    <div class="grid2">
+      <label>Best at<br><select id="bestPre" data-save>
+        <option value="">Choose one…</option>
+        <option>Task: is the work correct?</option>
+        <option>Process: what strategy would help?</option>
+        <option>Self-regulation: how to monitor your own learning</option>
+        <option>Self: praise or encouragement</option>
+      </select></label>
+      <label>Worst at<br><select id="worstPre" data-save>
+        <option value="">Choose one…</option>
+        <option>Task: is the work correct?</option>
+        <option>Process: what strategy would help?</option>
+        <option>Self-regulation: how to monitor your own learning</option>
+        <option>Self: praise or encouragement</option>
+      </select></label>
+    </div>
+
+    <p class="q">Would you give a learner an AI-drafted feedback note without editing it? Why or why not?</p>
+    <textarea id="whyPre" data-save placeholder="Two or three sentences."></textarea>
+  </div>
+  <div class="nav-row"><button class="btn ghost" data-go="0">Back</button><button class="btn" data-go="2">Next: read and work</button></div>
+</section>
+
+<!-- 2 READ AND WORK -->
+<section class="step" id="step-2">
+  <h2>2 · Read and work: desirable difficulties</h2>
+  <p>For each reading: do the short activity, answer the shared question, then compare with the instructors' notes. Total reading time is about 1 hour 45 minutes.</p>
+
+  <!-- Hattie -->
+  <div class="panel">
+    <div class="reading-head"><h3 style="margin:0">Reading 1 · The power of feedback</h3><span class="time">35 min</span></div>
+    <p class="cite">Hattie J, Timperley H. <em>Rev Educ Res.</em> 2007;77(1):81-112. <a href="https://doi.org/10.3102/003465430298487" target="_blank" rel="noopener">doi:10.3102/003465430298487</a>. Read the feedback model (the three questions and four levels). Skim the rest.</p>
+    <div class="task">
+      <h4>Activity: sort the feedback</h4>
+      <p class="hint">Assign each piece of feedback to Hattie and Timperley's level, then check your answers.</p>
+      <div id="sortItems"></div>
+      <button class="btn ghost" id="sortCheck" style="margin-top:10px">Check my answers</button>
+      <div class="reveal" id="sortReveal">In the Talwalkar notes, AI does well with task-level and process-level feedback that's tied to clear criteria. Self-regulation feedback depends on a back-and-forth conversation, which is exactly where AI struggled as a debriefer (Reading 2). Self-level praise is the least useful level whoever gives it.</div>
+    </div>
+    <p class="q">Shared question: Which feedback level is AI best at, and which is it worst at? Why?</p>
+    <textarea id="qHattie" data-save></textarea>
+  </div>
+
+  <!-- Jafri -->
+  <div class="panel">
+    <div class="reading-head"><h3 style="margin:0">Reading 2 · AI-powered simulation for telehealth communication training</h3><span class="time">20 min</span></div>
+    <p class="cite">Jafri FN, Elsener M, Kumar A, Kardong-Edgren S, Edwards RA. <em>Simul Healthc.</em> 2026. <a href="https://doi.org/10.1097/SIH.0000000000000940" target="_blank" rel="noopener">doi:10.1097/SIH.0000000000000940</a>. Read the debriefing findings and the discussion.</p>
+    <div class="task">
+      <h4>Activity: predict before you read</h4>
+      <p class="hint">The team tried several debriefing approaches across AI platforms. Which do you think AI could deliver reliably? Check all that apply, then read and reveal.</p>
+      <label class="check"><input type="checkbox" class="jafri" value="ai"> <span><strong>Advocacy-inquiry:</strong> the facilitator states an observation and a view, then asks about the learner's frame.</span></label>
+      <label class="check"><input type="checkbox" class="jafri" value="pd"> <span><strong>Plus-delta:</strong> the learner and facilitator list what went well and what to change.</span></label>
+      <label class="check"><input type="checkbox" class="jafri" value="micro"> <span><strong>Microdebriefing with rubric-focused feedback:</strong> short, specific feedback tied to rubric items, right after the performance.</span></label>
+      <button class="btn ghost" id="jafriCheck" style="margin-top:6px">Reveal</button>
+      <div class="reveal" id="jafriReveal"><span id="jafriScore"></span> Across platforms, AI couldn't reliably deliver advocacy-inquiry or plus-delta. Rubric-focused microdebriefing worked best, because it plays to AI's strength in consistent, structured feedback and avoids the complex facilitation it can't yet do. A companion study found communication scores on real calls improved 19 to 37% after the training.</div>
+    </div>
+    <p class="q">Shared question: Why couldn't AI do advocacy-inquiry, and what does that tell us about which feedback needs a person?</p>
+    <textarea id="qJafri" data-save></textarea>
+  </div>
+
+  <!-- Talwalkar -->
+  <div class="panel">
+    <div class="reading-head"><h3 style="margin:0">Reading 3 · Ambient AI scribes for educational feedback notes</h3><span class="time">30 min</span></div>
+    <p class="cite">Talwalkar JS, Chartash D, Zhang L, et al. <em>JMIR Med Educ.</em> 2026;12:e89996. <a href="https://doi.org/10.2196/89996" target="_blank" rel="noopener">doi:10.2196/89996</a>. Whole paper (11 pages).</p>
+    <div class="task">
+      <h4>Activity: estimate before you read</h4>
+      <p class="hint">An AI scribe recorded instructors' spoken feedback to first-year medical students, and an AI model wrote it up as a note. Make your best guesses.</p>
+      <p class="q">What share of the AI's feedback points misrepresented what the instructor said? <span class="rangeval" style="font-size:18px"><span id="estMisVal">10</span>%</span></p>
+      <input type="range" id="estMis" min="0" max="40" value="10" data-save>
+      <p class="q">What share described things that never happened (hallucinations)? <span class="rangeval" style="font-size:18px"><span id="estHalVal">10</span>%</span></p>
+      <input type="range" id="estHal" min="0" max="40" value="10" data-save>
+      <p class="q">How much longer were the AI-assisted notes than human-only notes? <span class="rangeval" style="font-size:18px"><span id="estLenVal">2</span>×</span></p>
+      <input type="range" id="estLen" min="1" max="12" value="2" data-save>
+      <button class="btn ghost" id="talCheck" style="margin-top:10px">Reveal</button>
+      <div class="reveal" id="talReveal"><span id="talCompare"></span><br>Raters also scored the AI-assisted notes higher on feedback quality (median 3 vs 2 out of 5), and instructors caught most errors while editing. But no one asked the students whether the notes helped them.</div>
+    </div>
+    <p class="q">Shared question: The AI notes scored higher, but no one asked the students. What would you need to know before using this in your course?</p>
+    <textarea id="qTal" data-save></textarea>
+  </div>
+
+  <!-- Masters -->
+  <div class="panel">
+    <div class="reading-head"><h3 style="margin:0">Reading 4 · Ethical use of AI in health professions education</h3><span class="time">20 min</span></div>
+    <p class="cite">Masters K. AMEE Guide No. 158. <em>Med Teach.</em> 2023. <a href="https://doi.org/10.1080/0142159X.2023.2186203" target="_blank" rel="noopener">doi:10.1080/0142159X.2023.2186203</a>. Read four sections only: algorithm bias, algorithm transparency, responsibility and accountability, and autonomy.</p>
+    <div class="task">
+      <h4>Activity: you decide</h4>
+      <p>A program adopts an AI tool that gives nursing students feedback on medication calculations. The tool tells a student a dose calculation is correct. It isn't. The student repeats the error in a high-stakes simulation and fails the station.</p>
+      <p class="q">Who is <em>most</em> responsible?</p>
+      <label class="radio"><input type="radio" name="resp" value="The vendor that built the tool" data-save-radio> The vendor that built the tool</label>
+      <label class="radio"><input type="radio" name="resp" value="The faculty member who assigned it" data-save-radio> The faculty member who assigned it</label>
+      <label class="radio"><input type="radio" name="resp" value="The institution that approved it" data-save-radio> The institution that approved it</label>
+      <label class="radio"><input type="radio" name="resp" value="The student, who should have checked" data-save-radio> The student, who should have checked</label>
+      <button class="btn ghost" id="respCheck" style="margin-top:8px">See what Masters argues</button>
+      <div class="reveal" id="respReveal">There's no single right answer, and that's Masters' point. AI offers probabilities, not answers for an individual case, so a person must make the final call, and institutions need clear policies on responsibility, accountability, blame, and credit <em>before</em> something goes wrong. He also names a trap: faculty can be blamed for ignoring an approved tool and for blindly following it. You'll meet that tension again in the lab.</div>
+    </div>
+    <p class="q">Shared question: If an AI feedback tool gets something wrong, who is responsible in your setting?</p>
+    <textarea id="qMasters" data-save></textarea>
+  </div>
+
+  <div class="lensbox">
+    <div class="tag">Through your lens</div>
+    <p id="lensPrompt" style="font-weight:600;margin:6px 0 10px"></p>
+    <textarea id="qLens" data-save placeholder="Draw on at least two readings. About 200 words."></textarea>
+  </div>
+
+  <details style="margin-top:18px">
+    <summary>Optional readings</summary>
+    <ul class="refs">
+      <li>Lee JD, See KA. Trust in automation: designing for appropriate reliance. <em>Hum Factors.</em> 2004;46(1):50-80. <a href="https://doi.org/10.1518/hfes.46.1.50_30392">doi</a></li>
+      <li>Liang W, et al. GPT detectors are biased against non-native English writers. <em>Patterns.</em> 2023;4(7):100779. <a href="https://doi.org/10.1016/j.patter.2023.100779">doi</a></li>
+      <li>Jafri FN, et al. Implementation of AI-powered patient simulation for communication training in a telehealth transitional care program. <em>Simul Healthc.</em> 2026. <a href="https://doi.org/10.1097/SIH.0000000000000971">doi</a></li>
+      <li>Ke Y, et al. AI-induced never-skilling in medical education. <em>Nat Med.</em> 2026. <a href="https://doi.org/10.1038/s41591-026-04438-y">doi</a></li>
+      <li>Masters K, et al. AI in HPE assessment: AMEE Guide No. 178. <em>Med Teach.</em> 2025. <a href="https://doi.org/10.1080/0142159X.2024.2445037">doi</a></li>
+    </ul>
+  </details>
+  <div class="nav-row"><button class="btn ghost" data-go="1">Back</button><button class="btn" data-go="3">Next: the lab</button></div>
+</section>
+
+<!-- 3 LAB -->
+<section class="step" id="step-3">
+  <h2>3 · Trust Lab</h2>
+  <div class="panel">
+    <p>Five short cases, each with AI feedback on a learner's work. For each one, decide what you'd do with it: use it as is, edit it, check something first, or not use it. There's no answer key. After each choice you'll see a case for using it and a case for caution, and at the end you'll see your own pattern to bring to your partner. (About 15 minutes.)</p>
+    <p><a class="btn" href="lab.html">Open the lab</a></p>
+    <p class="hint">When you finish, the lab brings you back here and your results carry over automatically.</p>
+    <div id="labStatus" class="callout" style="margin-top:14px"></div>
+  </div>
+  <div class="nav-row"><button class="btn ghost" data-go="2">Back</button><button class="btn" data-go="4">Next: reflect</button></div>
+</section>
+
+<!-- 4 REFLECT -->
+<section class="step" id="step-4">
+  <h2>4 · Reflect</h2>
+  <p>Here's what you predicted before you started. Re-rate your trust now, then reflect.</p>
+  <div class="compare">
+    <div class="card">
+      <p class="eyebrow" style="margin-bottom:6px">Before</p>
+      <p><strong>Trust in AI feedback:</strong> <span id="cmpTrust"></span></p>
+      <p><strong>AI best at:</strong> <span id="cmpBest"></span><br><strong>AI worst at:</strong> <span id="cmpWorst"></span></p>
+      <p class="small" id="cmpWhy"></p>
+    </div>
+    <div class="card">
+      <p class="eyebrow" style="margin-bottom:6px">Now</p>
+      <p class="q" style="margin-top:0">How much do you trust AI-generated feedback for learners now?</p>
+      <div class="rangeval"><span id="trustPostVal">50</span>%</div>
+      <input type="range" id="trustPost" min="0" max="100" value="50" data-save>
+      <p class="small" id="labLine"></p>
+    </div>
+  </div>
+  <div class="panel">
+    <p class="q" style="margin-top:0">Reflection (300 to 400 words, for your Theory Experience Portfolio)</p>
+    <ol class="small" style="color:var(--ink);font-size:15px">
+      <li>What changed between your prediction and now, and what changed it: a reading, the lab, or a specific case?</li>
+      <li>Look at your choices in the lab. Where were you most and least sure, and what does your lens explain about why?</li>
+      <li>In the course you're designing, what feedback would you give to AI and what would you keep human?</li>
+    </ol>
+    <textarea id="reflection" data-save style="min-height:220px"></textarea>
+    <p class="hint"><span id="wc">0</span> words</p>
+  </div>
+  <div class="nav-row"><button class="btn ghost" data-go="3">Back</button><button class="btn" data-go="5">Next: submit</button></div>
+</section>
+
+<!-- 5 SUBMIT -->
+<section class="step" id="step-5">
+  <h2>5 · Submit in D2L</h2>
+  <div class="panel">
+    <p>Copy your work and paste it into the D2L assignment. Then post your lens answer and lab summary to the partner discussion and reply to a partner from a different lens group.</p>
+    <pre class="export" id="export"></pre>
+    <button class="btn" id="copyAll">Copy everything</button>
+  </div>
+  <div class="panel">
+    <h3 style="margin-top:0">Then: apply it to your course</h3>
+    <p>Complete a one-page <strong>Feedback Design Card</strong> for one feedback moment in the course you're building: the outcome it serves, what AI does and what a person does, how your lens shapes it, one safeguard against over-trust and one against under-trust, and an equity check. The template and rubric are in the <a href="d2l.html#design-card">module page</a>.</p>
+  </div>
+  <div class="nav-row"><button class="btn ghost" data-go="4">Back</button><button class="btn ghost" id="reset">Clear my answers</button></div>
+</section>
+</main>
+
+<footer><div class="wrap">HE712AI · Sample module, Option 1 (interactive). Draft for co-development, November 2026.</div></footer>
+
+<script>
+const $ = id => document.getElementById(id);
+const mem = {};
+const store = {
+  get(k) { try { const v = localStorage.getItem("he712ai." + k); return v === null ? (mem[k] ?? null) : v; } catch { return mem[k] ?? null; } },
+  set(k, v) { mem[k] = v; try { localStorage.setItem("he712ai." + k, v); } catch {} },
+  clear() { try { Object.keys(localStorage).filter(k => k.startsWith("he712ai.")).forEach(k => localStorage.removeItem(k)); } catch {} Object.keys(mem).forEach(k => delete mem[k]); }
+};
+
+const LENS = {
+  kolb: ["Kolb's experiential learning", "Using at least two readings: where in Kolb's cycle can AI feedback help, and where does a person need to guide the reflection?"],
+  constructivism: ["Constructivism", "Using at least two readings: can AI feedback help learners build understanding rather than hand them answers? What scaffolding keeps that safe when the AI is wrong?"],
+  cogload: ["Cognitive load theory", "Using at least two readings: when does AI feedback reduce a learner's load, and when does it add to it? (Think about a 344-word note for a first-year student.)"],
+  sdt: ["Self-determination theory", "Using at least two readings: how does AI feedback affect a learner's sense of competence, autonomy, and relatedness? What has to stay human to protect relatedness?"],
+  dp: ["Deliberate practice", "Using at least two readings: deliberate practice needs immediate, specific feedback. Where could AI add repetitions, and what happens when it's wrong 2 to 7% of the time?"],
+  dual: ["Dual-process thinking", "Using at least two readings: what makes fluent AI feedback invite fast, uncritical acceptance, and what design features push learners to slow down and check it?"],
+  unstated: ["Unstated theory group", "Using at least two readings: what rule of thumb are you using to decide when AI feedback is good enough? What does that rule assume about how people learn?"]
+};
+
+const SORT = [
+  ["\"Your SBAR is missing the Recommendation. Add what you're asking the provider to do.\"", "task"],
+  ["\"Before you finalize a medication list, check each drug against today's labs. That habit catches most errors.\"", "process"],
+  ["\"Next time, what will you look for to know whether your handoff was complete?\"", "selfreg"],
+  ["\"Great job, you're a natural!\"", "self"]
+];
+const LEVELS = { task: "Task", process: "Process", selfreg: "Self-regulation", self: "Self" };
+
+// ----- navigation
+let current = 0;
+function go(n) {
+  current = n;
+  document.querySelectorAll("section.step").forEach((s, k) => s.classList.toggle("active", k === n));
+  document.querySelectorAll("#stepper button").forEach((b, k) => { b.classList.toggle("active", k === n); });
+  store.set("step", String(n));
+  if (n === 2) renderLens();
+  if (n === 3) renderLab();
+  if (n === 4) renderCompare();
+  if (n === 5) renderExport();
+  history.replaceState(null, "", "#step-" + n);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+document.querySelectorAll("[data-go]").forEach(b => b.onclick = () => { markDone(current); go(+b.dataset.go); });
+document.querySelectorAll("#stepper button").forEach(b => b.onclick = () => go(+b.dataset.step));
+function markDone(n) { const b = document.querySelector(`#stepper button[data-step="${n}"]`); if (b && n > 0) b.classList.add("done"); }
+
+// ----- lens
+const lensSel = $("lens");
+if (store.get("lens")) lensSel.value = store.get("lens");
+lensSel.onchange = () => store.set("lens", lensSel.value);
+store.set("lens", lensSel.value);
+function renderLens() { const L = LENS[lensSel.value]; $("lensPrompt").textContent = `${L[0]}: ${L[1]}`; }
+
+// ----- persist inputs
+document.querySelectorAll("[data-save]").forEach(el => {
+  const v = store.get(el.id); if (v !== null) el.value = v;
+  el.addEventListener("input", () => { store.set(el.id, el.value); sync(); });
+});
+document.querySelectorAll("[data-save-radio]").forEach(el => {
+  if (store.get(el.name) === el.value) el.checked = true;
+  el.addEventListener("change", () => store.set(el.name, el.value));
+});
+function sync() {
+  $("trustVal").textContent = $("trustPre").value;
+  $("trustPostVal").textContent = $("trustPost").value;
+  $("estMisVal").textContent = $("estMis").value;
+  $("estHalVal").textContent = $("estHal").value;
+  $("estLenVal").textContent = $("estLen").value;
+  const w = $("reflection").value.trim().split(/\s+/).filter(Boolean).length; $("wc").textContent = w;
+}
+
+// ----- Hattie sort
+$("sortItems").innerHTML = SORT.map((s, k) => `<div class="item"><div>${s[0]}</div><div><select data-k="${k}" class="sortSel"><option value="">Level…</option>${Object.entries(LEVELS).map(([v, l]) => `<option value="${v}">${l}</option>`).join("")}</select><span class="mark" id="mk${k}"></span></div></div>`).join("");
+document.querySelectorAll(".sortSel").forEach(s => { const v = store.get("sort" + s.dataset.k); if (v) s.value = v; s.onchange = () => store.set("sort" + s.dataset.k, s.value); });
+$("sortCheck").onclick = () => {
+  let right = 0;
+  document.querySelectorAll(".sortSel").forEach(s => {
+    const k = +s.dataset.k, ok = s.value === SORT[k][1]; if (ok) right++;
+    $("mk" + k).className = "mark " + (ok ? "ok" : "no");
+    $("mk" + k).textContent = ok ? "Correct" : `→ ${LEVELS[SORT[k][1]]}`;
+  });
+  store.set("sortScore", `${right}/4`);
+  $("sortReveal").classList.add("show");
+};
+
+// ----- Jafri predict
+document.querySelectorAll(".jafri").forEach(c => { if ((store.get("jafri") || "").split(",").includes(c.value)) c.checked = true; c.onchange = saveJafri; });
+function saveJafri() { store.set("jafri", [...document.querySelectorAll(".jafri:checked")].map(c => c.value).join(",")); }
+$("jafriCheck").onclick = () => {
+  const picked = [...document.querySelectorAll(".jafri:checked")].map(c => c.value);
+  const exact = picked.length === 1 && picked[0] === "micro";
+  $("jafriScore").innerHTML = exact ? "<strong>You called it.</strong>" : `<strong>You predicted:</strong> ${picked.length ? picked.map(p => ({ ai: "advocacy-inquiry", pd: "plus-delta", micro: "microdebriefing" })[p]).join(", ") : "none"}.`;
+  store.set("jafriResult", exact ? "matched" : "differed");
+  $("jafriReveal").classList.add("show");
+};
+
+// ----- Talwalkar estimates
+$("talCheck").onclick = () => {
+  const m = +$("estMis").value, h = +$("estHal").value, l = +$("estLen").value;
+  $("talCompare").innerHTML = `<strong>Mischaracterized:</strong> you guessed ${m}%, actual 6.8%. <strong>Hallucinated:</strong> you guessed ${h}%, actual 1.7%. <strong>Length:</strong> you guessed ${l}×, actual about 7× (a median of 344 words vs 45 to 46).`;
+  $("talReveal").classList.add("show");
+};
+
+// ----- Masters
+$("respCheck").onclick = () => $("respReveal").classList.add("show");
+
+// ----- Lab status
+function renderLab() {
+  const s = store.get("labSummary");
+  $("labStatus").innerHTML = s ? `<strong>Lab complete.</strong> ${s.split("\n")[2]}` : "Not done yet. Your results will appear here when you finish.";
+}
+
+// ----- Compare
+function renderCompare() {
+  $("cmpTrust").textContent = $("trustPre").value + "%";
+  $("cmpBest").textContent = $("bestPre").value || "(not answered)";
+  $("cmpWorst").textContent = $("worstPre").value || "(not answered)";
+  $("cmpWhy").textContent = $("whyPre").value ? `"${$("whyPre").value}"` : "";
+  const s = store.get("labSummary");
+  $("labLine").textContent = s ? "Lab: " + s.split("\n")[2] : "Complete the lab to see your choices here.";
+  sync();
+}
+
+// ----- Export
+function renderExport() {
+  const L = LENS[lensSel.value];
+  const v = id => ($(id).value || "").trim() || "(blank)";
+  const out = [
+    "HE712AI · Feedback and Trust in AI · My work",
+    `Lens: ${L[0]}`,
+    "",
+    "1. PREDICTION",
+    `Trust in AI feedback: ${$("trustPre").value}%`,
+    `AI best at: ${$("bestPre").value || "(blank)"} | Worst at: ${$("worstPre").value || "(blank)"}`,
+    `Unedited AI note? ${v("whyPre")}`,
+    "",
+    "2. READINGS",
+    `Hattie & Timperley (sorting activity ${store.get("sortScore") || "not checked"}): ${v("qHattie")}`,
+    `Jafri et al.: ${v("qJafri")}`,
+    `Talwalkar et al. (my estimates: ${$("estMis").value}% / ${$("estHal").value}% / ${$("estLen").value}×): ${v("qTal")}`,
+    `Masters (I chose: ${store.get("resp") || "no answer"}): ${v("qMasters")}`,
+    `Through my lens: ${v("qLens")}`,
+    "",
+    "3. LAB",
+    store.get("labSummary") || "(lab not completed)",
+    "",
+    "4. REFLECTION",
+    `Trust now: ${$("trustPost").value}% (was ${$("trustPre").value}%)`,
+    v("reflection")
+  ].join("\n");
+  $("export").textContent = out;
+}
+$("copyAll").onclick = async () => { try { await navigator.clipboard.writeText($("export").textContent); $("copyAll").textContent = "Copied"; } catch { const r = document.createRange(); r.selectNodeContents($("export")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); $("copyAll").textContent = "Selected: press Ctrl/Cmd+C"; } };
+let armed = false;
+$("reset").onclick = () => {
+  if (!armed) { armed = true; $("reset").textContent = "Click again to clear everything"; setTimeout(() => { armed = false; $("reset").textContent = "Clear my answers"; }, 4000); return; }
+  store.clear(); location.hash = "step-0"; location.reload();
+};
+
+// ----- start
+sync();
+const fromHash = /#step-(\d)/.exec(location.hash);
+go(fromHash ? +fromHash[1] : +(store.get("step") || 0));
+</script>
+</body>
+</html>
